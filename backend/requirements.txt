@@ -10,3 +10,6 @@ python-jose[cryptography]
 passlib[bcrypt]
 python-multipart
 pdfplumber
+pydantic[email]
+bcrypt
+email-validator
