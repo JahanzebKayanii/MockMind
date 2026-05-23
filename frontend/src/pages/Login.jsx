@@ -28,6 +28,13 @@ export default function Login() {
   return (
     <div className="page">
       <div className="card">
+        <button
+          className="btn-ghost"
+          style={{ width: "auto", marginBottom: 16, fontSize: 13 }}
+          onClick={() => navigate("/")}
+        >
+          ← Back
+        </button>
         <div className="logo"><span className="logo-icon">🧠</span> MockMind</div>
         <div className="subtitle">Your AI interview coach</div>
 
