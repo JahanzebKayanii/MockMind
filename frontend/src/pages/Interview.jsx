@@ -27,6 +27,7 @@ export default function Interview() {
   const [timeLeft, setTimeLeft] = useState(0);
   const recognitionRef = useRef(null);
   const timerRef = useRef(null);
+  const isListeningRef = useRef(false);
 
   useEffect(() => {
     resumeSession();
@@ -83,6 +84,9 @@ export default function Interview() {
 
   async function handleSubmit() {
     if (!answer.trim()) return;
+    isListeningRef.current = false;
+    recognitionRef.current?.stop();
+    setIsListening(false);
     clearInterval(timerRef.current);
     setSubmitting(true);
     try {
@@ -109,6 +113,7 @@ export default function Interview() {
   function toggleSpeech() {
     if (!speechSupported) return;
     if (isListening) {
+      isListeningRef.current = false;
       recognitionRef.current?.stop();
       setIsListening(false);
       return;
@@ -131,9 +136,19 @@ export default function Interview() {
       }
       setAnswer(finalTranscript + (interim ? " " + interim : ""));
     };
-    recognition.onend = () => setIsListening(false);
-    recognition.onerror = () => setIsListening(false);
+    recognition.onend = () => {
+      if (isListeningRef.current) {
+        recognition.start();
+      } else {
+        setIsListening(false);
+      }
+    };
+    recognition.onerror = () => {
+      isListeningRef.current = false;
+      setIsListening(false);
+    };
     recognitionRef.current = recognition;
+    isListeningRef.current = true;
     recognition.start();
     setIsListening(true);
   }
