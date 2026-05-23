@@ -13,9 +13,12 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="MockMind API")
 
+allowed_origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:5174")
+origins = [o.strip() for o in allowed_origins.split(",")]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=os.getenv("ALLOWED_ORIGINS", "http://localhost:5173").split(","),
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
